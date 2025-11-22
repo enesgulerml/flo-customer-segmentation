@@ -1,0 +1,26 @@
+Git
+
+.git/
+.gitignore
+.dockerignore
+Dockerfile
+
+Data and Models (Will be fetched via script)
+
+data/
+models/
+mlruns/
+mlartifacts/
+*.db
+*.db-journal
+
+Python Cache & OS
+
+*.egg-info/
+pycache/
+build/
+dist/
+.env
+.pytest_cache/
+.idea/
+.

@@ -1,0 +1,22 @@
+artifact_path: file:///C:/Users/jenes/PycharmProjects/flo-customer-segmentation/mlartifacts/1/models/m-534392edec9d40f7a786099ac110f38e/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.10.19
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.7.2
+mlflow_version: 3.6.0
+model_id: m-534392edec9d40f7a786099ac110f38e
+model_size_bytes: 72620
+model_uuid: m-534392edec9d40f7a786099ac110f38e
+prompts: null
+run_id: 088a7450838e42cea5ce97d7e0d19a21
+utc_time_created: '2025-11-22 08:35:44.171207'
