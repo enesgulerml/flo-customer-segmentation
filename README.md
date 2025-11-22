@@ -58,7 +58,7 @@ flo-customer-segmentation/
 
 1.  **Clone the Repository:**
     ```bash
-    git clone [https://github.com/enesgulerml/flo-customer-segmentation.git](https://github.com/enesgulerml/flo-customer-segmentation.git)
+    git clone https://github.com/enesgulerml/flo-customer-segmentation.git
     cd flo-customer-segmentation
     ```
 
