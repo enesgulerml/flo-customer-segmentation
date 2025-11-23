@@ -64,7 +64,7 @@ def health_check():
 @app.post("/predict", response_model=PredictionResponse)
 def predict_segment(customer: CustomerInput):
     if not models["kmeans"]:
-        raise HTTPException(status_code=503, detail="Model yüklenemedi.")
+        raise HTTPException(status_code=503, detail="Model couldn't download.")
 
     try:
         processed_df = preprocess_input(customer)
