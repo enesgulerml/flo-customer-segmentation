@@ -57,7 +57,10 @@ def preprocess_input(data: CustomerInput) -> pd.DataFrame:
 
 @app.get("/")
 def health_check():
-    status = "Active" if models["kmeans"] else "Inactive"
+
+    model = models.get("kmeans")
+    status = "Active" if model else "Inactive"
+
     return {"status": status, "service": "FLO Segmentation API"}
 
 
