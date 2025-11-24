@@ -1,87 +1,133 @@
-# End-to-End FLO Customer Segmentation (v5.0)
+# 👟 FLO Customer Segmentation & RFM Analysis
 
-This project implements a production-grade **Unsupervised Learning** pipeline to segment customers based on their Omnichannel (Online + Offline) shopping behavior.
+![Python](https://img.shields.io/badge/Python-3.10-blue)
+![Scikit-Learn](https://img.shields.io/badge/Model-K--Means-orange)
+![MLflow](https://img.shields.io/badge/MLflow-Tracking-0194E2)
+![Docker](https://img.shields.io/badge/Docker-Production-2496ED)
+![FastAPI](https://img.shields.io/badge/FastAPI-Serving-009688)
 
-It moves beyond simple notebooks by implementing a robust **MLOps** architecture:
-* **v1.0: Data Engineering:** Omnichannel integration, Outlier Removal (IQR), and RFM Feature Engineering.
-* **v2.0: Model Training:** K-Means clustering with Auto-Tuning (Elbow Method) and MLflow Tracking.
-* **v3.1: API Serving:** A Dockerized **FastAPI** service using an "Embedded Model" strategy (CI/CD simulation).
-* **v4.0: Dashboard:** An interactive **Streamlit** client for real-time segmentation.
-* **v5.0: Testing:** A full `pytest` suite for quality assurance.
+## 📖 Overview
+This repository implements a production-ready **Unsupervised Machine Learning pipeline** to segment e-commerce customers based on their purchasing behavior. Using real-world data from FLO (a leading shoe retailer), the system identifies distinct customer personas to enable targeted marketing strategies.
+
+**Methodology:**
+The project combines **RFM Analysis** (Recency, Frequency, Monetary) with **K-Means Clustering** to classify customers. The resulting model is deployed via a decoupled architecture featuring a FastAPI backend and a Streamlit dashboard.
+
+**Key Features:**
+* **Data Engineering:** Automatic calculation of RFM metrics from transaction logs.
+* **MLOps Workflow:** End-to-end pipeline with MLflow tracking and Model Registry.
+* **Embedded Deployment:** Docker container with "baked-in" model artifacts for immutable deployments.
+* **Interactive Intelligence:** Streamlit dashboard for visualizing customer clusters.
 
 ---
 
-## 🚀 Project Structure
+## 📂 Project Structure
 
-
-
----
-
-## 🛠️ Installation & Setup
-
-Follow these steps to set up the project environment on your local machine.
-
-### 1. Clone the Repository
-```bash
-git clone https://github.com/enesgulerml/flo-customer-segmentation.git
-cd flo-customer-segmentation
+```text
+flo-customer-segmentation/
+│
+├── app/                  # Inference Service
+│   ├── main.py           # FastAPI Application
+│   ├── schema.py         # Pydantic Models for Input Validation
+│   └── model_files/      # (CI/CD Artifacts) Embedded K-Means Model
+│
+├── dashboard/            # Business Intelligence UI
+│   └── app.py            # Streamlit Dashboard Logic
+│
+├── src/                  # Core ML Pipeline
+│   ├── config.py         # Configuration & Path Management
+│   ├── data_processing.py# RFM Calculation & Feature Engineering
+│   ├── train.py          # K-Means Training & MLflow Logging
+│   └── fetch_model.py    # CI/CD Script: Artifact Retrieval
+│
+├── notebooks/            # Exploratory Data Analysis
+│   └── 01-eda.ipynb      # Initial clustering experiments
+│
+├── tests/                # Quality Assurance
+│   └── test_api.py       # API Endpoint Tests
+│
+├── requirements.txt      # Project Dependencies
+└── Dockerfile            # Production Container Setup
 ```
 
-### 2. Setup Environment (v5 Strategy - Pip)
-We use Conda for Python management and Pip for package management to avoid solver issues.
+## 🛠️ Installation & Setup
+Prerequisites
+* Python 3.10+
+* Docker (Optional but recommended)
+* Dataset: Ensure [flo_data_20k.csv](https://www.kaggle.com/code/mustafaoz158/flo-cltv-prediction/input) is placed in data/raw/.
+
+### 1. Environment Setup
 ```bash
+# Clone the repository
+git clone https://github.com/enesgulerml/flo-customer-segmentation.git
+cd flo-customer-segmentation
+
+# Create Virtual Environment
 conda create -n flo-segmentation python=3.10 -y
 conda activate flo-segmentation
+
+# Install Dependencies
 pip install -r requirements.txt
 pip install -e .
 ```
 
-### 3. Add Raw Data
-Place your flo_data.csv file into the data/raw/ directory. (Note: Data is not tracked by Git due to privacy/size).
+## ⚡ MLOps Workflow
+This project follows a strict ETL -> Train -> Register -> Serve lifecycle.
 
-## ⚡ Workflow & Usage
-### Phase 1: Data Engineering & Training (v1.0 - v2.0)
-This step processes raw data, calculates RFM metrics, removes outliers, applies log transformation, and auto-tunes K-Means (testing k=3 to 10) to find the best cluster count.
-1. **Start MLflow Server (Terminal 1):** Keep this terminal open.
+### Phase 1: Data Processing & Training
+1. Start MLflow Server:
+
+This step converts raw transaction logs into RFM scores, determines the optimal number of clusters (using Elbow Method/Silhouette Score), and registers the K-Means model.
 ```bash
 mlflow server --backend-store-uri sqlite:///mlflow.db --default-artifact-root ./mlartifacts --host 0.0.0.0 --port 5000
 ```
-2. **Run Training (Terminal 2):**
+
+2. Run Pipeline:
+
 ```bash
 python -m src.train
 ```
-Check results at http://127.0.0.1:5000. The winning model is automatically registered.
+This script automatically performs RFM feature engineering before training.
 
-### Phase 2: Build the API Image (v3.1)
-We use an Embedded Model Strategy. The model is fetched from the Registry and baked into the Docker image at build time, making the container self-sufficient.
+### Phase 2: Build & Deployment (CI/CD)
+We use the Embedded Model Pattern. The model is fetched from the registry and built into the Docker image, ensuring the container is self-sufficient.
 
-1. **Fetch Model:** Downloads the latest production model to app/model_files/.
+1. Fetch Artifacts: Downloads the latest production model to app/model_files/.
+
 ```bash
 python -m src.fetch_model
 ```
 
-2. **Build Docker Image:**
+2. Build Docker Image:
 ```bash
-docker build -t flo-api:v1 .
+docker build -t flo-api:latest .
 ```
 
-### Phase 3: Serve & Demo (v4.0)
-Now run the microservices architecture.
+### Phase 3: Serving & Visualization
+Deploy the API and connect the dashboard.
 
-1. **Run API Motor (Terminal 2):** Runs the container on port 8005. No external volumes required.
+1. Run API Container: Runs on port 8000.
 ```bash
-docker run -d --rm -p 8005:80 flo-api:v1
+docker run -d --rm -p 8000:80 flo-api:latest
 ```
-Verify API Docs: http://localhost:8005/docs
+👉 API Docs: http://localhost:8000/docs
 
-2. **Run Dashboard (Terminal 3):** Launches the Streamlit interface to interact with the model.
+2. Launch Dashboard: Visualize the segments and analyze customer profiles.
 ```bash
 streamlit run dashboard/app.py
 ```
-Open Dashboard: http://localhost:8501
+👉 Dashboard: http://localhost:8501
 
-### Phase 4: Testing (v5.0)
-Run the automated test suite to ensure system integrity.
+## 🧪 Testing
+Automated tests ensure the API correctly handles RFM inputs and predicts clusters.
 ```bash
-python -m pytest
+# Run API integration tests
+pytest tests/test_api.py -v
 ```
+
+## 📊 Business Logic: RFM Analysis
+For those interested in the underlying methodology:
+* Recency (R): Days since last purchase.
+* Frequency (F): Total number of purchases.
+* Monetary (M): Total spending.
+
+The model clusters customers into groups (e.g., "Loyal", "Hibernating", "New Customers") allowing marketing teams to take specific actions for each group.
