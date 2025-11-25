@@ -1,4 +1,4 @@
-artifact_path: file:///C:/Users/jenes/PycharmProjects/flo-customer-segmentation/mlartifacts/1/models/m-534392edec9d40f7a786099ac110f38e/artifacts
+artifact_path: file:///C:/Users/jenes/PycharmProjects/flo-customer-segmentation/mlartifacts/1/models/m-5a60e93d917743d4bd234e2be4912aa1/artifacts
 flavors:
   python_function:
     env:
@@ -14,9 +14,9 @@ flavors:
     serialization_format: cloudpickle
     sklearn_version: 1.7.2
 mlflow_version: 3.6.0
-model_id: m-534392edec9d40f7a786099ac110f38e
+model_id: m-5a60e93d917743d4bd234e2be4912aa1
 model_size_bytes: 72620
-model_uuid: m-534392edec9d40f7a786099ac110f38e
+model_uuid: m-5a60e93d917743d4bd234e2be4912aa1
 prompts: null
-run_id: 088a7450838e42cea5ce97d7e0d19a21
-utc_time_created: '2025-11-22 08:35:44.171207'
+run_id: 3f6a550cfeb94f87b30151d1af201e89
+utc_time_created: '2025-11-24 10:03:51.143590'

@@ -108,6 +108,7 @@ Deploy the API and connect the dashboard.
 1. Run API Container: Runs on port 8005.
 ```bash
 docker run -d --rm -p 8005:80 flo-api:latest
+docker run -d --rm -p 8005:80 flo-api:latest 
 ```
 👉 API Docs: http://localhost:8005/docs
 
