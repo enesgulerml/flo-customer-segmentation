@@ -105,11 +105,11 @@ docker build -t flo-api:latest .
 ### Phase 3: Serving & Visualization
 Deploy the API and connect the dashboard.
 
-1. Run API Container: Runs on port 8000.
+1. Run API Container: Runs on port 8005.
 ```bash
-docker run -d --rm -p 8000:80 flo-api:latest
+docker run -d --rm -p 8005:80 flo-api:latest
 ```
-👉 API Docs: http://localhost:8000/docs
+👉 API Docs: http://localhost:8005/docs
 
 2. Launch Dashboard: Visualize the segments and analyze customer profiles.
 ```bash
